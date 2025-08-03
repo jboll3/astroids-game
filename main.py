@@ -1,10 +1,12 @@
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 import pygame
+import sys
 from constants import *
 from player import *
 from asteroid import *
 from asteroidfield import *
+from bullet import *
 
 def main():
     dt = 0
@@ -13,9 +15,11 @@ def main():
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
+    bullets = pygame.sprite.Group()
     Player.containers =  (updatable, drawable)
     Asteroid.containers= (asteroids, updatable, drawable)
     AsteroidField.containers=(updatable,)
+    Shot.containers=(bullets, updatable, drawable)
 
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
@@ -34,6 +38,16 @@ def main():
         updatable.update(dt)
         for thing in drawable:
             thing.draw(screen)
+        for asteroid in asteroids:
+            if player.collision(asteroid) == True:
+                print ("Game Over!")
+                sys.exit()
+            for bullet in bullets:
+                if bullet.collision(asteroid)==True:
+                    bullet.kill()
+                    asteroid.split()
+
+
         pygame.display.flip()
         dt_ms = clock.tick(60)
         dt = dt_ms / 1000.0
