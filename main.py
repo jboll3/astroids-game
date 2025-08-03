@@ -3,6 +3,8 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 import pygame
 from constants import *
 from player import *
+from asteroid import *
+from asteroidfield import *
 
 def main():
     dt = 0
@@ -10,11 +12,15 @@ def main():
 
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
-    Player.containers =  (updatable, drawable)    
+    asteroids = pygame.sprite.Group()
+    Player.containers =  (updatable, drawable)
+    Asteroid.containers= (asteroids, updatable, drawable)
+    AsteroidField.containers=(updatable,)
 
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
     player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
+    asteroidfield = AsteroidField()
 
 
 
